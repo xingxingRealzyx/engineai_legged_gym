@@ -171,13 +171,13 @@ class ZqSA01(LeggedRobot):
         # print('dof_pos:', list(map(lambda x: "%.4f" % x, self.dof_pos[0])))
         # print('dof_vel:', list(map(lambda x: "%.4f" % x, self.dof_vel[0])))
         self.obs_buf = torch.cat((
-            self.cos_pos,  # 2
-            self.commands[:, :3] * self.commands_scale,  # 3
-            self.base_ang_vel * self.obs_scales.ang_vel,  # 3
-            self.base_euler_xyz,  # 3
-            (self.dof_pos - self.default_dof_pos) * self.obs_scales.dof_pos,  # 12
-            self.dof_vel * self.obs_scales.dof_vel,  # 12
-            self.actions * self.cfg.control.action_scale,  # 12
+            self.cos_pos,  # 2 
+            self.commands[:, :3] * self.commands_scale,  # 3 命令
+            self.base_ang_vel * self.obs_scales.ang_vel,  # 3 基座角速递
+            self.base_euler_xyz,  # 3 基座欧拉角
+            (self.dof_pos - self.default_dof_pos) * self.obs_scales.dof_pos,  # 12 所有自由度的角度
+            self.dof_vel * self.obs_scales.dof_vel,  # 12 所有自由度的角速度
+            self.actions * self.cfg.control.action_scale,  # 12 上一轮输出的action
             ), dim=-1)
         # print(self.base_euler_xyz[0])
         # add perceptive inputs if not blind
